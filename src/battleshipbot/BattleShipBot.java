@@ -16,3 +16,7 @@ public class BattleShipBot {
         battleBot.addEventListener(new BattleListener()); // This adds an event listener that lets the program know what goes on in discord
     }
 }
+
+/*
+Add A SaveOnExit Method
+*/
