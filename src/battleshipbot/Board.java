@@ -23,13 +23,23 @@ public class Board {
         }
     }
     public String showBoard() {
-        String fullBoard = "";
-        for (String[] board1 : board) {
-            for (String board11 : board1) {
+        String fullBoard = "| ABCDEFGHIJ\n";
+        for (int i = 0; i < board.length; i++) {
+            fullBoard += (i + " ");
+            for (String board11 : board[i]) {
                 fullBoard += board11;
             }
             fullBoard += "\n";
         }
         return fullBoard;
+    }
+    public boolean isAHit(int x, int y) {
+        boolean isAHit = false;
+        if (Integer.parseInt(board[x][y]) > 1) {
+            board[x][y] = "1";
+            isAHit = true;
+        }
+        board[x][y] = "-1";
+        return isAHit;
     }
 }
