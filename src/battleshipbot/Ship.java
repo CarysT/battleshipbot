@@ -1,6 +1,6 @@
 package battleshipbot;
 
-public class Ship {
+class Ship {
     private final int length;
     private int direction;
     private final String name;

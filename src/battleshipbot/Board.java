@@ -1,13 +1,13 @@
 package battleshipbot;
 
-public class Board {
+class Board {
     private String[][] board;
     public Board() {
         board = new String[10][10];
         initialize();
     }
     public int getWidth(int x) {
-        return board[0].length;
+        return board[x].length;
     }
     public int getHeight() {
         return board.length;
@@ -23,15 +23,15 @@ public class Board {
         }
     }
     public String showBoard() {
-        String fullBoard = "| ABCDEFGHIJ\n";
+        StringBuilder fullBoard = new StringBuilder("| ABCDEFGHIJ\n");
         for (int i = 0; i < board.length; i++) {
-            fullBoard += (i + " ");
+            fullBoard.append(i).append(" ");
             for (String board11 : board[i]) {
-                fullBoard += board11;
+                fullBoard.append(board11);
             }
-            fullBoard += "\n";
+            fullBoard.append("\n");
         }
-        return fullBoard;
+        return fullBoard.toString();
     }
     public boolean isAHit(int x, int y) {
         boolean isAHit = false;

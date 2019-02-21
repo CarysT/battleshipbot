@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 
-public class BattleShipBot {
+class BattleShipBot {
     public static void main(String[] args) throws Exception {
         String token = new BufferedReader(new FileReader("token.txt")).readLine(); /* This token file should only be accessed by 
                                                                                 Carys Tryhorn. It is vitally important that nobody
