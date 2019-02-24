@@ -5,7 +5,6 @@ import net.dv8tion.jda.core.JDABuilder;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Scanner;
 
 class BattleShipBot {
     public static void main(String[] args) throws Exception {
@@ -15,12 +14,6 @@ class BattleShipBot {
         JDA battleBot = new JDABuilder(token).build(); // This creates a new bot and verifies it with discord using its token
         BattleListener.loadGames();
         battleBot.addEventListener(new BattleListener()); // This adds an event listener that lets the program know what goes on in discord
-        Scanner keyboard = new Scanner(System.in);
-        do {
-            System.out.print("> ");
-            String input = keyboard.nextLine();
-            if ("quit".equals(input))
-                return;
-        } while(true);
+        BattleListener.saveGame();
     }
 }

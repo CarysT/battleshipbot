@@ -1,28 +1,19 @@
 package com.battleshipbot.game;
 
 class Ship {
-    private final int length;
-    private int direction;
-    private final String name;
+    private final ShipType type;
     private boolean afloat;
     private int[] locations;
-    public Ship(int l, String n) {
-        length = l;
-        name = n;
+    public Ship(ShipType t) {
+        type = t;
         afloat = true;
-        locations = new int[l];
+        locations = new int[t.getLength()];
     }
     public int getLength() {
-        return length;
+        return type.getLength();
     }
-    public String getType() {
-        return name;
-    }
-    public int getDirection() {
-        return direction;
-    }
-    public void setDirection(int d) {
-        direction = d;
+    public ShipType getType() {
+        return type;
     }
     public void sink() {
         afloat = false;
@@ -35,8 +26,5 @@ class Ship {
     }
     public int[] spacesOccupied() {
         return locations;
-    }
-    public boolean equals(Ship other) {
-        return (other.length == length && name.equals(other.name));
     }
 }

@@ -8,10 +8,7 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 
 class BattleListener extends ListenerAdapter {
@@ -44,6 +41,17 @@ class BattleListener extends ListenerAdapter {
                 return;
             }
         }
+    }
+    public static void saveGame() {
+        games.forEach((userid,game) -> { try (FileWriter writer = new FileWriter("saves/" + userid + ".txt", true)) {
+            writer.write(userid + "\n");
+            writer.write(game.getPlayerBoard());
+            writer.write(game.getAIBoard());
+        } catch(IOException e) {
+            System.out.println("Error in saving game!");
+            System.out.println(e.getMessage());
+        }
+        });
     }
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {

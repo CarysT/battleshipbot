@@ -7,9 +7,9 @@ import java.io.IOException;
 
 public class Game {
     private Board playerBoard = new Board();
-    private final Ship[] availableShips = {new Ship(5, "Carrier"), new Ship(4, "Battleship"),
-            new Ship(3, "Cruiser"), new Ship(3, "Submarine"), new Ship(2, "Destroyer")};
     private Board AIBoard = new Board();
+    private final Ship[] availableShips = {new Ship(ShipType.CARRIER), new Ship(ShipType.BATTLESHIP),
+            new Ship(ShipType.CRUISER), new Ship(ShipType.SUBMARINE), new Ship(ShipType.DESTROYER)};
     public Game(Member player) {
         newGame(player.getUser().getId());
     }
@@ -31,9 +31,13 @@ public class Game {
         command = command.replace(command.substring(0,command.indexOf(" ")+1), "");
         String name = command.substring(0, command.indexOf(" "));
         int length = 0;
-        for (Ship s : availableShips)
-            if (s.getType().equals(name))
+        ShipType type = ShipType.DEFAULT;
+        for (Ship s : availableShips) {
+            if (s.getType().equals(name)) {
                 length = s.getLength();
+                type = s.getType();
+            }
+        }
         command = command.replace(command.substring(0,command.indexOf(" ")+1), "");
         int coordy = Integer.parseInt(command.substring(0,1));
         int coordx = command.charAt(1)-65;
@@ -44,25 +48,33 @@ public class Game {
                 Board copy = playerBoard;
                 if ("north".equalsIgnoreCase(direction)) {
                     for (int i = 0; i < length; i++) {
-                        copy.setPosition(coordx, coordy, "2");
+                        if (!"0".equals(copy.getPosition(coordx, coordy)))
+                            throw new Exception("Ship already there.");
+                        copy.setPosition(coordx, coordy, type.getID());
                         coordx += 1 * -1;
                     }
                 }
                 else if ("east".equalsIgnoreCase(direction)) {
                     for (int i = 0; i < length; i++) {
-                        copy.setPosition(coordx, coordy, "2");
+                        if (!"0".equals(copy.getPosition(coordx, coordy)))
+                            throw new Exception("Ship already there.");
+                        copy.setPosition(coordx, coordy, type.getID());
                         coordy += 1;
                     }
                 }
                 else if ("south".equalsIgnoreCase(direction)) {
                     for (int i = 0; i < length; i++) {
-                        copy.setPosition(coordx, coordy, "2");
+                        if (!"0".equals(copy.getPosition(coordx, coordy)))
+                            throw new Exception("Ship already there.");
+                        copy.setPosition(coordx, coordy, type.getID());
                         coordx += 1;
                     }
                 }
                 else if ("west".equalsIgnoreCase(direction)) {
                     for (int i = 0; i < length; i++) {
-                        copy.setPosition(coordx, coordy, "2");
+                        if (!"0".equals(copy.getPosition(coordx, coordy)))
+                            throw new Exception("Ship already there.");
+                        copy.setPosition(coordx, coordy, type.getID());
                         coordy += 1 * -1;
                     }
                 }
@@ -81,7 +93,16 @@ public class Game {
     public boolean shootAt(int x, int y, boolean isPlayer) {
         return(isPlayer) ? playerBoard.isAHit(x, y) : AIBoard.isAHit(x, y);
     }
+    public boolean isGameReady() {
+        return false;
+    }
     public String showBoard() {
         return playerBoard.showBoard();
+    }
+    public String getPlayerBoard() {
+        return playerBoard.print();
+    }
+    public String getAIBoard() {
+        return AIBoard.print();
     }
 }
