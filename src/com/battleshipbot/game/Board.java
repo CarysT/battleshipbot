@@ -25,8 +25,8 @@ public class Board {
     }
     public String print() {
         StringBuilder fullBoard = new StringBuilder();
-        for (int i = 0; i < board.length; i++) {
-            for (String board11 : board[i]) {
+        for (String[] board1 : board) {
+            for (String board11 : board1) {
                 fullBoard.append(board11);
             }
             fullBoard.append("\n");

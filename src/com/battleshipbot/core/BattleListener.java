@@ -43,7 +43,7 @@ class BattleListener extends ListenerAdapter {
         }
     }
     public static void saveGame() {
-        games.forEach((userid,game) -> { try (FileWriter writer = new FileWriter("saves/" + userid + ".txt", true)) {
+        games.forEach((userid,game) -> { try (FileWriter writer = new FileWriter("saves/" + userid + ".txt", false)) {
             writer.write(userid + "\n");
             writer.write(game.getPlayerBoard());
             writer.write(game.getAIBoard());
@@ -62,33 +62,49 @@ class BattleListener extends ListenerAdapter {
     	String userid = user.getId();
         MessageChannel channel = event.getChannel();
         if (!channel.getName().equals("battleship-bot")) return;
-        if ("!ng".equals(message)) {
-            channel.sendMessage("Starting a New Game!").queue();
-            games.put(userid, new Game(member));
-        }
-        if ("!sb".equals(message)) {
-            if (games.get(userid) != null) {
-                channel.sendMessage(games.get(userid).showBoard()).queue();
-            } else {
-                channel.sendMessage("You have no board to show!").queue();
+        try {
+            if ("!ng".equals(message)) {
+                channel.sendMessage("Starting a New Game!").queue();
+                games.put(userid, new Game(member));
             }
-        }
-        if (message.startsWith("!ps")) {
-            String m = (games.get(userid).placeShip(message, true)) ? "Ship placed!" : "Invalid Ship placement";
-            channel.sendMessage(m).queue();
-        }
-        if ("!who".equals(message)) {
-            channel.sendMessage("You are: " + user.getName()).queue();
-        }
-        if ("!battle".equals(message)) {
-            channel.sendMessage("To the death!").queue();
-        }
-        if ("!help".equals(message)) {
-            channel.sendMessage("For now the available commands are:\n```" +
-                    "!help - Shows all available commands\n!ng - Starts A New Game\n" +
-                    "!who - Which outputs your nickname\n!sb - Shows your game board\n" +
-                    "!battle - inside joke\n!ps - Allows you to place down your ships: [ship] [coords of front(1A)]" +
-                    " [direction]```").queue();
+            if ("!sb".equals(message)) {
+                if (games.get(userid) != null) {
+                    channel.sendMessage(games.get(userid).showBoard()).queue();
+                } else {
+                    channel.sendMessage("You have no board to show!").queue();
+                }
+            }
+            if ("!gr".equals(message)) {
+                if (games.get(userid) != null) {
+                    if (games.get(userid).isGameReady()) {
+                        channel.sendMessage("You are ready to play").queue();
+                    } else {
+                        channel.sendMessage("You still have ships to place").queue();
+                    }
+                } else {
+                    channel.sendMessage("You need to create a new game first!").queue();
+                }
+            }
+            if (message.startsWith("!ps")) {
+                String m = (games.get(userid).placeShip(message, true)) ? "Ship placed!" : "Invalid Ship placement";
+                channel.sendMessage(m).queue();
+            }
+            if ("!who".equals(message)) {
+                channel.sendMessage("You are: " + user.getName()).queue();
+            }
+            if ("!battle".equals(message)) {
+                channel.sendMessage("To the death!").queue();
+            }
+            if ("!help".equals(message)) {
+                channel.sendMessage("For now the available commands are:\n```" +
+                        "!help - Shows all available commands\n!ng - Starts A New Game\n" +
+                        "!who - Which outputs your nickname\n!sb - Shows your game board\n" +
+                        "!battle - inside joke\n!ps - Allows you to place down your ships: [ship] [coords of front(1A)]" +
+                        " [direction]\n!gr - checks to see if your game is ready to play```").queue();
+            }
+        } catch(Exception e) {
+            System.out.println("Invalid command");
+            channel.sendMessage("Invalid command").queue();
         }
     }
 }
