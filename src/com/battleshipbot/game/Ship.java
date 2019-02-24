@@ -1,4 +1,4 @@
-package battleshipbot;
+package com.battleshipbot.game;
 
 class Ship {
     private final int length;
@@ -35,5 +35,8 @@ class Ship {
     }
     public int[] spacesOccupied() {
         return locations;
+    }
+    public boolean equals(Ship other) {
+        return (other.length == length && name.equals(other.name));
     }
 }

@@ -1,5 +1,7 @@
-package battleshipbot;
+package com.battleshipbot.core;
 
+import com.battleshipbot.game.Board;
+import com.battleshipbot.game.Game;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -20,29 +22,24 @@ class BattleListener extends ListenerAdapter {
         File[] loads = dir.listFiles((File dir1, String filename) -> filename.endsWith(".txt"));
         if (loads == null) return;
         String[] names = new String[loads.length];
-        
+
         for (int x = 0; x < loads.length; x++) {
             try(BufferedReader br = new BufferedReader(new FileReader(loads[x]))) {
                 names[x] = br.readLine();
-                for (String name : names) {
-                    Board playerBoard = new Board();
-                    Board AIBoard = new Board();
-                    String temp;
-                    for (int i = 0; i < playerBoard.getHeight();i++) {
-                        temp = br.readLine();
-                        for (int j = 0; j < playerBoard.getWidth(i);j++) {
-                            playerBoard.setPosition(i,j,String.valueOf(temp.charAt(j)));
-                        }
-                    }
-                    for (int i = 0; i < AIBoard.getHeight();i++) {
-                        temp = br.readLine();
-                        for (int j = 0; j < AIBoard.getWidth(i);j++) {
-                            AIBoard.setPosition(i,j,String.valueOf(temp.charAt(j)));
-                        }
-                    }
-                    games.put(name, new Game(playerBoard, AIBoard));
-                    br.close();
+                Board playerBoard = new Board();
+                Board AIBoard = new Board();
+                String temp;
+                for (int i = 0; i < playerBoard.getHeight();i++) {
+                    temp = br.readLine();
+                    for (int j = 0; j < playerBoard.getWidth(i);j++)
+                        playerBoard.setPosition(i, j, String.valueOf(temp.charAt(j)));
                 }
+                for (int i = 0; i < AIBoard.getHeight();i++) {
+                    temp = br.readLine();
+                    for (int j = 0; j < AIBoard.getWidth(i);j++)
+                        AIBoard.setPosition(i, j, String.valueOf(temp.charAt(j)));
+                }
+                games.put(names[x], new Game(playerBoard, AIBoard));
             } catch(IOException e) {
                 return;
             }
@@ -68,6 +65,10 @@ class BattleListener extends ListenerAdapter {
                 channel.sendMessage("You have no board to show!").queue();
             }
         }
+        if (message.startsWith("!ps")) {
+            String m = (games.get(userid).placeShip(message, true)) ? "Ship placed!" : "Invalid Ship placement";
+            channel.sendMessage(m).queue();
+        }
         if ("!who".equals(message)) {
             channel.sendMessage("You are: " + user.getName()).queue();
         }
@@ -78,7 +79,8 @@ class BattleListener extends ListenerAdapter {
             channel.sendMessage("For now the available commands are:\n```" +
                     "!help - Shows all available commands\n!ng - Starts A New Game\n" +
                     "!who - Which outputs your nickname\n!sb - Shows your game board\n" +
-                    "!battle - inside joke```").queue();
+                    "!battle - inside joke\n!ps - Allows you to place down your ships: [ship] [coords of front(1A)]" +
+                    " [direction]```").queue();
         }
     }
 }

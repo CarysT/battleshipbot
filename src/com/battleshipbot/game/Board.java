@@ -1,6 +1,6 @@
-package battleshipbot;
+package com.battleshipbot.game;
 
-class Board {
+public class Board {
     private String[][] board;
     public Board() {
         board = new String[10][10];
@@ -15,12 +15,23 @@ class Board {
     public void setPosition(int x, int y, String t) {
         board[x][y] = t;
     }
+    public String getPosition(int x, int y) { return board[x][y]; }
     private void initialize() {
         for (int i = 0; i < board.length;i++) {
             for (int j = 0; j < board[i].length;j++) {
                 board[i][j] = "0";
             }
         }
+    }
+    public String print() {
+        StringBuilder fullBoard = new StringBuilder();
+        for (int i = 0; i < board.length; i++) {
+            for (String board11 : board[i]) {
+                fullBoard.append(board11);
+            }
+            fullBoard.append("\n");
+        }
+        return fullBoard.toString();
     }
     public String showBoard() {
         StringBuilder fullBoard = new StringBuilder("| ABCDEFGHIJ\n");
